@@ -1,0 +1,1714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>KP Group · Renewable Infrastructure Story</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg-0: #04060d;
+    --bg-1: #070b18;
+    --bg-2: #0b1224;
+    --panel: rgba(10, 18, 36, 0.78);
+    --panel-stroke: rgba(94, 234, 212, 0.18);
+    --grid: rgba(94, 234, 212, 0.06);
+    --text: #e6f1ff;
+    --muted: #7b8aa8;
+    --cyan: #5eead4;
+    --cyan-soft: #22d3ee;
+    --orange: #fb923c;
+    --orange-soft: #fbbf24;
+    --purple: #a78bfa;
+    --green: #4ade80;
+    --pink: #f472b6;
+    --red: #f87171;
+    --yellow: #fde047;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    background: var(--bg-0);
+    color: var(--text);
+    font-family: 'Rajdhani', sans-serif;
+    overflow: hidden;
+    position: relative;
+  }
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background:
+      radial-gradient(ellipse 80% 50% at 20% 0%, rgba(94, 234, 212, 0.10), transparent 60%),
+      radial-gradient(ellipse 60% 40% at 80% 100%, rgba(251, 146, 60, 0.08), transparent 60%);
+    pointer-events: none; z-index: 0;
+  }
+  body::after {
+    content: '';
+    position: fixed; inset: 0;
+    background-image:
+      linear-gradient(rgba(94, 234, 212, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(94, 234, 212, 0.04) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: radial-gradient(ellipse 100% 80% at 50% 50%, #000 30%, transparent 80%);
+    pointer-events: none; z-index: 0;
+  }
+
+  .app {
+    position: relative; z-index: 1;
+    height: 100vh;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    padding: 12px 18px 14px;
+    gap: 10px;
+  }
+
+  /* ===================== HEADER ===================== */
+  .header {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 22px;
+    padding: 8px 16px;
+    background: linear-gradient(180deg, rgba(94, 234, 212, 0.04), transparent);
+    border-top: 1px solid rgba(94, 234, 212, 0.20);
+    border-bottom: 1px solid rgba(94, 234, 212, 0.10);
+  }
+  .brand { display: flex; align-items: center; gap: 14px; }
+  .logo {
+    width: 48px; height: 48px;
+    border: 1.5px solid var(--cyan);
+    background: rgba(94, 234, 212, 0.06);
+    display: grid; place-items: center;
+    position: relative;
+    box-shadow: 0 0 20px rgba(94, 234, 212, 0.25), inset 0 0 12px rgba(94, 234, 212, 0.10);
+  }
+  .logo::before {
+    content: 'Since 1994';
+    position: absolute; top: -9px; left: 50%; transform: translateX(-50%);
+    font-family: 'Rajdhani', sans-serif; font-size: 8px; font-weight: 600;
+    color: var(--cyan); background: var(--bg-0); padding: 0 4px; letter-spacing: 0.08em;
+  }
+  .logo-text { font-family: 'Orbitron', sans-serif; font-weight: 800; color: var(--cyan); font-size: 17px; line-height: 1; }
+  .logo-text small { display: block; font-size: 6.5px; font-weight: 600; letter-spacing: 0.25em; color: var(--muted); margin-top: 3px; }
+  .brand-text { display: flex; flex-direction: column; gap: 2px; }
+  .brand-title { font-family: 'Orbitron', sans-serif; font-size: 20px; font-weight: 700; color: var(--cyan); letter-spacing: 0.16em; }
+  .brand-sub { font-family: 'Rajdhani', sans-serif; font-size: 10px; font-weight: 500; letter-spacing: 0.28em; color: var(--muted); text-transform: uppercase; }
+  .brand-sub b { color: var(--text); font-weight: 600; }
+
+  .tickers { display: flex; gap: 14px; justify-content: center; align-items: center; flex-wrap: nowrap; overflow: hidden; }
+  .ticker { display: flex; flex-direction: column; align-items: flex-start; padding: 3px 12px; border-left: 1px solid rgba(94, 234, 212, 0.18); }
+  .ticker:first-child { border-left: none; }
+  .ticker-label { font-family: 'Rajdhani', sans-serif; font-size: 9px; font-weight: 600; color: var(--muted); letter-spacing: 0.18em; text-transform: uppercase; }
+  .ticker-value { font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 600; color: var(--cyan); margin-top: 1px; }
+  .ticker-value.orange { color: var(--orange-soft); }
+  .ticker-value.green { color: var(--green); }
+  .ticker-value.purple { color: var(--purple); }
+
+  .header-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+  .live-pill {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 4px 12px;
+    border: 1px solid var(--red); color: var(--red);
+    font-family: 'Orbitron', sans-serif; font-size: 9px; font-weight: 700; letter-spacing: 0.18em;
+    box-shadow: 0 0 16px rgba(248, 113, 113, 0.30);
+  }
+  .live-pill::before {
+    content: ''; width: 6px; height: 6px; border-radius: 50%;
+    background: var(--red); box-shadow: 0 0 10px var(--red);
+    animation: pulse 1.4s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+  .clock { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); letter-spacing: 0.08em; }
+  .clock b { color: var(--text); }
+
+  /* ===================== STAGE ===================== */
+  .stage {
+    position: relative;
+    border: 1px solid var(--panel-stroke);
+    background:
+      radial-gradient(ellipse 90% 60% at 50% 60%, #0a1428 0%, #050912 70%, #04060d 100%);
+    overflow: hidden;
+  }
+  .stage::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(94, 234, 212, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(94, 234, 212, 0.03) 1px, transparent 1px);
+    background-size: 28px 28px;
+    pointer-events: none;
+  }
+  .corner { position: absolute; width: 20px; height: 20px; border: 1px solid var(--cyan); opacity: 0.6; }
+  .corner.tl { top: 8px; left: 8px; border-right: none; border-bottom: none; }
+  .corner.tr { top: 8px; right: 8px; border-left: none; border-bottom: none; }
+  .corner.bl { bottom: 8px; left: 8px; border-right: none; border-top: none; }
+  .corner.br { bottom: 8px; right: 8px; border-left: none; border-top: none; }
+
+  .stage-title {
+    position: absolute; top: 14px; left: 50%; transform: translateX(-50%);
+    text-align: center; pointer-events: none; z-index: 5;
+  }
+  .stage-title .eyebrow { font-family: 'Orbitron', sans-serif; font-size: 9px; font-weight: 600; color: var(--cyan); letter-spacing: 0.40em; opacity: 0.7; }
+  .stage-title .title { font-family: 'Orbitron', sans-serif; font-size: 22px; font-weight: 800; color: var(--text); letter-spacing: 0.12em; margin-top: 3px; text-shadow: 0 0 24px rgba(94, 234, 212, 0.30); transition: color 0.5s; }
+
+  .scene-wrap { position: absolute; inset: 0; }
+  .scene { width: 100%; height: 100%; display: block; }
+
+  /* Detail panel */
+  .detail-panel {
+    position: absolute;
+    top: 64px; right: 18px;
+    width: 300px;
+    background: var(--panel);
+    backdrop-filter: blur(14px);
+    border: 1px solid var(--panel-stroke);
+    border-left: 3px solid var(--cyan);
+    padding: 14px 16px 16px;
+    z-index: 8;
+    transition: border-left-color 0.5s ease, transform 0.45s cubic-bezier(0.7, 0, 0.3, 1), opacity 0.35s ease;
+    transform-origin: top right;
+  }
+  .detail-panel.collapsed {
+    transform: translateX(calc(100% + 24px));
+    opacity: 0;
+    pointer-events: none;
+  }
+  .detail-panel.orange { border-left-color: var(--orange); }
+  .detail-panel.cyan { border-left-color: var(--cyan); }
+  .detail-panel.purple { border-left-color: var(--purple); }
+  .detail-panel.green { border-left-color: var(--green); }
+  .detail-panel.yellow { border-left-color: var(--yellow); }
+  .detail-panel.pink { border-left-color: var(--pink); }
+
+  .panel-close {
+    position: absolute;
+    top: 8px; right: 8px;
+    width: 22px; height: 22px;
+    display: grid; place-items: center;
+    border: 1px solid rgba(94, 234, 212, 0.30);
+    background: rgba(94, 234, 212, 0.06);
+    color: var(--cyan);
+    cursor: pointer;
+    transition: all 0.2s;
+    z-index: 2;
+  }
+  .panel-close:hover {
+    background: rgba(248, 113, 113, 0.15);
+    border-color: var(--red);
+    color: var(--red);
+  }
+  .panel-close svg { width: 12px; height: 12px; }
+
+  /* Floating reopen tab that appears when panel is collapsed */
+  .panel-reopen {
+    position: absolute;
+    top: 64px; right: 18px;
+    display: none;
+    align-items: center; gap: 8px;
+    padding: 8px 12px;
+    background: var(--panel);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--panel-stroke);
+    border-left: 3px solid var(--cyan);
+    color: var(--cyan);
+    font-family: 'Orbitron', sans-serif;
+    font-size: 10px; font-weight: 700; letter-spacing: 0.18em;
+    cursor: pointer;
+    z-index: 8;
+    transition: all 0.3s;
+    text-transform: uppercase;
+  }
+  .panel-reopen.visible { display: inline-flex; animation: tabSlideIn 0.4s cubic-bezier(0.7, 0, 0.3, 1); }
+  .panel-reopen:hover {
+    background: rgba(94, 234, 212, 0.10);
+    box-shadow: 0 0 18px rgba(94, 234, 212, 0.20);
+  }
+  .panel-reopen.orange { border-left-color: var(--orange); color: var(--orange-soft); }
+  .panel-reopen.cyan { border-left-color: var(--cyan); color: var(--cyan); }
+  .panel-reopen.purple { border-left-color: var(--purple); color: var(--purple); }
+  .panel-reopen.green { border-left-color: var(--green); color: var(--green); }
+  .panel-reopen.yellow { border-left-color: var(--yellow); color: var(--yellow); }
+  .panel-reopen.pink { border-left-color: var(--pink); color: var(--pink); }
+  .panel-reopen svg { width: 12px; height: 12px; }
+  @keyframes tabSlideIn { from { transform: translateX(20px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+  .detail-chapter { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--muted); letter-spacing: 0.18em; margin-bottom: 4px; }
+  .detail-chapter b { color: var(--cyan); }
+  .detail-title { font-family: 'Orbitron', sans-serif; font-size: 16px; font-weight: 700; color: var(--text); letter-spacing: 0.06em; margin-bottom: 2px; }
+  .detail-tag { font-family: 'Rajdhani', sans-serif; font-size: 10px; color: var(--muted); letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 12px; }
+
+  .detail-metrics { display: grid; gap: 7px; }
+  .metric {
+    display: grid; grid-template-columns: 30px 1fr auto;
+    align-items: center; gap: 10px;
+    padding: 6px 9px;
+    background: rgba(94, 234, 212, 0.04);
+    border: 1px solid rgba(94, 234, 212, 0.10);
+    border-left: 2px solid var(--cyan);
+  }
+  .metric.orange { border-left-color: var(--orange); }
+  .metric.cyan { border-left-color: var(--cyan); }
+  .metric.purple { border-left-color: var(--purple); }
+  .metric.green { border-left-color: var(--green); }
+  .metric.yellow { border-left-color: var(--yellow); }
+  .metric.pink { border-left-color: var(--pink); }
+  .metric-icon { width: 30px; height: 30px; display: grid; place-items: center; opacity: 0.9; }
+  .metric-icon svg { width: 24px; height: 24px; }
+  .metric-info { display: flex; flex-direction: column; }
+  .metric-label { font-family: 'Rajdhani', sans-serif; font-size: 9px; font-weight: 500; color: var(--muted); letter-spacing: 0.12em; text-transform: uppercase; }
+  .metric-value { font-family: 'Orbitron', sans-serif; font-size: 15px; font-weight: 700; color: var(--text); line-height: 1.1; }
+  .metric.orange .metric-value { color: var(--orange-soft); }
+  .metric.cyan .metric-value { color: var(--cyan); }
+  .metric.purple .metric-value { color: var(--purple); }
+  .metric.green .metric-value { color: var(--green); }
+  .metric.yellow .metric-value { color: var(--yellow); }
+  .metric.pink .metric-value { color: var(--pink); }
+  .metric-suffix { font-family: 'Rajdhani', sans-serif; font-size: 8px; color: var(--muted); letter-spacing: 0.12em; text-transform: uppercase; }
+
+  .detail-desc {
+    margin-top: 12px; padding-top: 10px;
+    border-top: 1px dashed rgba(94, 234, 212, 0.15);
+    font-family: 'Rajdhani', sans-serif; font-size: 12px;
+    color: var(--muted); line-height: 1.45;
+  }
+
+  /* Legend (always visible, shows what's what in the scene) */
+  .legend {
+    position: absolute;
+    bottom: 14px; left: 18px;
+    display: flex; gap: 12px;
+    padding: 8px 12px;
+    background: var(--panel);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--panel-stroke);
+    z-index: 7;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .legend-item { display: flex; align-items: center; gap: 5px; }
+  .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .legend-dot.orange { background: var(--orange); box-shadow: 0 0 6px var(--orange); }
+  .legend-dot.cyan { background: var(--cyan); box-shadow: 0 0 6px var(--cyan); }
+  .legend-dot.purple { background: var(--purple); box-shadow: 0 0 6px var(--purple); }
+  .legend-dot.green { background: var(--green); box-shadow: 0 0 6px var(--green); }
+  .legend-dot.yellow { background: var(--yellow); box-shadow: 0 0 6px var(--yellow); }
+  .legend-dot.pink { background: var(--pink); box-shadow: 0 0 6px var(--pink); }
+
+  /* ===================== TIMELINE ===================== */
+  .timeline {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 16px;
+    padding: 8px 14px;
+    background: linear-gradient(180deg, transparent, rgba(94, 234, 212, 0.04));
+    border-top: 1px solid rgba(94, 234, 212, 0.10);
+    border-bottom: 1px solid rgba(94, 234, 212, 0.20);
+  }
+  .controls { display: flex; align-items: center; gap: 8px; }
+  .btn {
+    width: 32px; height: 32px;
+    display: grid; place-items: center;
+    border: 1px solid var(--cyan);
+    background: rgba(94, 234, 212, 0.06);
+    color: var(--cyan); cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn:hover { background: rgba(94, 234, 212, 0.18); box-shadow: 0 0 14px rgba(94, 234, 212, 0.30); }
+  .btn svg { width: 14px; height: 14px; }
+  .chapters {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 8px;
+  }
+  .chapter-btn {
+    background: none; border: none; cursor: pointer; padding: 3px 5px 5px;
+    display: flex; flex-direction: column; gap: 4px;
+    text-align: left;
+    font-family: 'Rajdhani', sans-serif;
+    color: var(--muted);
+    transition: color 0.3s;
+  }
+  .chapter-btn:hover { color: var(--text); }
+  .chapter-btn.active { color: var(--text); }
+  .chapter-num { font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 0.18em; opacity: 0.7; }
+  .chapter-name { font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
+  .chapter-bar { height: 3px; background: rgba(94, 234, 212, 0.10); position: relative; overflow: hidden; }
+  .time-display { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 0.08em; min-width: 80px; text-align: right; }
+  .time-display b { color: var(--text); }
+
+  /* ===================== ANIMATIONS ===================== */
+  .turbine-blade { transform-origin: center; animation: spin 4s linear infinite; }
+  .turbine-blade.fast { animation-duration: 2.5s; }
+  .turbine-blade.slow { animation-duration: 5s; }
+  @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+  .pulse-dot { animation: pulseDot 2s ease-in-out infinite; }
+  @keyframes pulseDot { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+  .flow-line { stroke-dasharray: 4 10; animation: flow 1.6s linear infinite; }
+  .flow-line.slow { animation-duration: 2.4s; }
+  .flow-line.reverse { animation-direction: reverse; }
+  @keyframes flow { to { stroke-dashoffset: -28; } }
+
+  .panel-glint { animation: glint 4s ease-in-out infinite; }
+  @keyframes glint { 0%, 100% { opacity: 0.25; } 50% { opacity: 0.8; } }
+
+  /* Focus glow that moves between chapters */
+  .focus-glow { transition: opacity 0.8s ease; }
+
+  /* Numbered callouts - always visible, active one pulses bigger */
+  .callout { cursor: pointer; transition: filter 0.4s; }
+  .callout-circle-bg { transition: r 0.4s ease, fill-opacity 0.4s ease; }
+  .callout-halo { opacity: 0; transition: opacity 0.4s ease; }
+  .callout.active .callout-halo { opacity: 1; animation: haloPulse 2s ease-in-out infinite; }
+  .callout.active .callout-circle-bg { fill-opacity: 1; }
+  .callout-num { font-family: 'Orbitron', sans-serif; font-weight: 800; pointer-events: none; }
+  .callout-leader { transition: stroke-width 0.4s, opacity 0.4s; }
+  .callout.active .callout-leader { stroke-width: 1.8; opacity: 1; }
+  @keyframes haloPulse {
+    0%, 100% { opacity: 0.4; transform: scale(1); }
+    50% { opacity: 0.9; transform: scale(1.15); }
+  }
+  .callout-halo { transform-box: fill-box; transform-origin: center; }
+
+  /* Active-asset glow enhancement (additive, never dims others) */
+  .asset-glow { opacity: 0; transition: opacity 0.6s ease; }
+  .asset-glow.active { opacity: 1; }
+
+  /* Floating tooltip badges */
+  .tip {
+    position: absolute;
+    background: rgba(4, 6, 13, 0.92);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--panel-stroke);
+    padding: 4px 9px;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 10px; letter-spacing: 0.10em; text-transform: uppercase;
+    color: var(--text); pointer-events: none; z-index: 6;
+    white-space: nowrap;
+    transition: opacity 0.3s, transform 0.3s, border-color 0.3s;
+    opacity: 0.85;
+  }
+  .tip b { font-family: 'Orbitron', sans-serif; font-weight: 700; }
+  .tip.orange { border-color: var(--orange); }
+  .tip.orange b { color: var(--orange-soft); }
+  .tip.cyan { border-color: var(--cyan); }
+  .tip.cyan b { color: var(--cyan); }
+  .tip.purple { border-color: var(--purple); }
+  .tip.purple b { color: var(--purple); }
+  .tip.green { border-color: var(--green); }
+  .tip.green b { color: var(--green); }
+  .tip.yellow { border-color: var(--yellow); }
+  .tip.yellow b { color: var(--yellow); }
+  .tip.pink { border-color: var(--pink); }
+  .tip.pink b { color: var(--pink); }
+  .tip.active { opacity: 1; transform: scale(1.05); box-shadow: 0 0 18px rgba(94, 234, 212, 0.20); }
+
+  @media (max-width: 1280px) {
+    .detail-panel { width: 260px; top: 56px; }
+    .tickers { gap: 10px; } .ticker { padding: 3px 9px; } .ticker-value { font-size: 11px; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ========== HEADER ========== -->
+  <header class="header">
+    <div class="brand">
+      <div class="logo">
+        <div class="logo-text">KP<small>GROUP</small></div>
+      </div>
+      <div class="brand-text">
+        <div class="brand-title">KP GROUP</div>
+        <div class="brand-sub"><b>RENEWABLE</b> · <b>REASONABLE</b> · <b>RELIABLE</b></div>
+      </div>
+    </div>
+
+    <div class="tickers">
+      <div class="ticker"><span class="ticker-label">YDay Gen</span><span class="ticker-value cyan">7,617,902 kWh</span></div>
+      <div class="ticker"><span class="ticker-label">MTD Gen</span><span class="ticker-value cyan">138.6M kWh</span></div>
+      <div class="ticker"><span class="ticker-label">YTD Gen</span><span class="ticker-value cyan">884.3M kWh</span></div>
+      <div class="ticker"><span class="ticker-label">YDay Rev</span><span class="ticker-value orange">₹11.9 M</span></div>
+      <div class="ticker"><span class="ticker-label">CO₂ Saved</span><span class="ticker-value green">3.5 M T</span></div>
+      <div class="ticker"><span class="ticker-label">Trees</span><span class="ticker-value green">236.2 M</span></div>
+      <div class="ticker"><span class="ticker-label">Portfolio</span><span class="ticker-value purple">9,181 MW</span></div>
+    </div>
+
+    <div class="header-meta">
+      <div class="live-pill">LIVE FEED</div>
+      <div class="clock"><b id="clock-time">18:47:23</b> · 20 May 2026</div>
+    </div>
+  </header>
+
+  <!-- ========== STAGE ========== -->
+  <main class="stage">
+    <div class="corner tl"></div><div class="corner tr"></div>
+    <div class="corner bl"></div><div class="corner br"></div>
+
+    <div class="stage-title">
+      <div class="eyebrow">UNIFIED INFRASTRUCTURE · RENEWABLE ENERGY GRID</div>
+      <div class="title" id="stage-title">FROM GENERATION TO GRID — END-TO-END POWER FLOW</div>
+    </div>
+
+    <aside class="detail-panel" id="detail-panel">
+      <button class="panel-close" id="panel-close" aria-label="Close details panel" title="Hide details (press D)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+          <line x1="6" y1="6" x2="18" y2="18"/>
+          <line x1="18" y1="6" x2="6" y2="18"/>
+        </svg>
+      </button>
+      <div class="detail-chapter">CHAPTER <b id="d-chapter">01 / 06</b></div>
+      <div class="detail-title" id="d-title">SOLAR GENERATION</div>
+      <div class="detail-tag" id="d-tag">Photovoltaic Asset Layer</div>
+      <div class="detail-metrics" id="d-metrics"></div>
+      <div class="detail-desc" id="d-desc"></div>
+    </aside>
+
+    <!-- Reopen tab that appears when detail panel is collapsed -->
+    <button class="panel-reopen" id="panel-reopen" aria-label="Show details panel" title="Show details (press D)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <line x1="3" y1="6" x2="21" y2="6"/>
+        <line x1="3" y1="12" x2="21" y2="12"/>
+        <line x1="3" y1="18" x2="21" y2="18"/>
+      </svg>
+      <span>Details</span>
+    </button>
+
+    <div class="legend">
+      <div class="legend-item"><span class="legend-dot orange"></span>Solar PV</div>
+      <div class="legend-item"><span class="legend-dot cyan"></span>Wind</div>
+      <div class="legend-item"><span class="legend-dot purple"></span>Transformers</div>
+      <div class="legend-item"><span class="legend-dot green"></span>PSS</div>
+      <div class="legend-item"><span class="legend-dot yellow"></span>Grid / GSS / Tx Line</div>
+      <div class="legend-item"><span class="legend-dot pink"></span>Land / Clients</div>
+    </div>
+
+    <!-- HTML stat tooltips overlaid on the scene (always visible) -->
+    <div class="tip orange" style="top: 71%; left: 4%;"><b>8.5M+</b> Modules</div>
+    <div class="tip orange" style="top: 82%; left: 21%;"><b>274,000+</b> Strings</div>
+    <div class="tip orange" style="top: 78%; left: 37%;"><b>4,000+</b> Inverters</div>
+    <div class="tip cyan"   style="top: 28%; left: 4%;"><b>910+</b> WTGs</div>
+    <div class="tip purple" style="top: 50%; left: 42%;"><b>2,200+</b> Transformers</div>
+    <div class="tip purple" style="top: 26%; left: 30%;"><b>80</b> Locations</div>
+    <div class="tip green"  style="top: 58%; left: 56%;"><b>75+</b> PSS</div>
+    <div class="tip yellow" style="top: 20%; left: 60%;"><b>2,200+ KM</b> Transmission</div>
+    <div class="tip yellow" style="top: 32%; left: 80%;"><b>60+</b> GSS</div>
+    <div class="tip yellow" style="top: 46%; left: 82%;"><b>4,900+ MW</b> Evac. Capacity</div>
+    <div class="tip pink"   style="top: 72%; left: 81%;"><b>12,200+</b> Acres</div>
+    <div class="tip pink"   style="top: 84%; left: 88%;"><b>210+</b> Clients</div>
+
+    <div class="scene-wrap">
+      <svg class="scene" viewBox="0 0 1600 780" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <!-- ============ GRADIENTS ============ -->
+          <linearGradient id="groundGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#0d1830" stop-opacity="0.9"/>
+            <stop offset="100%" stop-color="#040810" stop-opacity="1"/>
+          </linearGradient>
+          <linearGradient id="ridgeGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#162540"/>
+            <stop offset="100%" stop-color="#0a1428"/>
+          </linearGradient>
+          <linearGradient id="solarPanel" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#1a2540"/>
+            <stop offset="100%" stop-color="#0a1024"/>
+          </linearGradient>
+          <linearGradient id="solarPanelLit" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#22304d"/>
+            <stop offset="100%" stop-color="#0d1530"/>
+          </linearGradient>
+          <linearGradient id="towerGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#94a3b8"/>
+            <stop offset="100%" stop-color="#475569"/>
+          </linearGradient>
+          <!-- Tubular gradient for wind turbine tower - lateral lighting across cylinder.
+               Darker on edges, brighter in middle to suggest curved tubular surface. -->
+          <linearGradient id="towerTube" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%"   stop-color="#475569"/>
+            <stop offset="22%"  stop-color="#cbd5e1"/>
+            <stop offset="50%"  stop-color="#f1f5f9"/>
+            <stop offset="78%"  stop-color="#94a3b8"/>
+            <stop offset="100%" stop-color="#334155"/>
+          </linearGradient>
+          <linearGradient id="txBody" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#243049"/>
+            <stop offset="100%" stop-color="#0f172a"/>
+          </linearGradient>
+          <linearGradient id="bldgL" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#0f1828"/>
+            <stop offset="100%" stop-color="#1a2540"/>
+          </linearGradient>
+          <linearGradient id="bldgR" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#1a2540"/>
+            <stop offset="100%" stop-color="#0c1626"/>
+          </linearGradient>
+
+          <radialGradient id="focusOrange" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#fb923c" stop-opacity="0.32"/>
+            <stop offset="50%" stop-color="#fb923c" stop-opacity="0.10"/>
+            <stop offset="100%" stop-color="#fb923c" stop-opacity="0"/>
+          </radialGradient>
+          <radialGradient id="focusCyan" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#5eead4" stop-opacity="0.32"/>
+            <stop offset="50%" stop-color="#5eead4" stop-opacity="0.10"/>
+            <stop offset="100%" stop-color="#5eead4" stop-opacity="0"/>
+          </radialGradient>
+          <radialGradient id="focusPurple" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#a78bfa" stop-opacity="0.32"/>
+            <stop offset="50%" stop-color="#a78bfa" stop-opacity="0.10"/>
+            <stop offset="100%" stop-color="#a78bfa" stop-opacity="0"/>
+          </radialGradient>
+          <radialGradient id="focusGreen" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#4ade80" stop-opacity="0.32"/>
+            <stop offset="50%" stop-color="#4ade80" stop-opacity="0.10"/>
+            <stop offset="100%" stop-color="#4ade80" stop-opacity="0"/>
+          </radialGradient>
+          <radialGradient id="focusYellow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#fde047" stop-opacity="0.30"/>
+            <stop offset="50%" stop-color="#fde047" stop-opacity="0.08"/>
+            <stop offset="100%" stop-color="#fde047" stop-opacity="0"/>
+          </radialGradient>
+          <radialGradient id="focusPink" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#f472b6" stop-opacity="0.32"/>
+            <stop offset="50%" stop-color="#f472b6" stop-opacity="0.10"/>
+            <stop offset="100%" stop-color="#f472b6" stop-opacity="0"/>
+          </radialGradient>
+
+          <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="2.5" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+
+          <!-- ============ SYMBOLS ============ -->
+
+          <!-- Solar Panel — tilted modules visibly mounted on MMS (Module Mounting Structure).
+               viewBox 0 0 60 40. Panel face is a tilted parallelogram raised on visible posts.
+               Cell-grid pattern divides the surface into individual modules. -->
+          <symbol id="solar-panel" viewBox="0 0 60 40">
+            <!-- MMS frame: front posts (shorter) + back posts (taller for tilt) + rails + diagonal braces -->
+            <g stroke="#64748b" stroke-width="0.6" fill="none" opacity="0.95">
+              <!-- Front (shorter) legs touching the ground -->
+              <line x1="12" y1="24" x2="12" y2="34"/>
+              <line x1="28" y1="20" x2="28" y2="30"/>
+              <line x1="44" y1="16" x2="44" y2="26"/>
+              <!-- Back (taller) legs that raise the panel rear edge -->
+              <line x1="18" y1="14" x2="18" y2="22"/>
+              <line x1="34" y1="10" x2="34" y2="18"/>
+              <line x1="50" y1="6"  x2="50" y2="14"/>
+              <!-- Mount rails connecting tops of legs (panel sits on these) -->
+              <line x1="12" y1="24" x2="44" y2="16"/>
+              <line x1="18" y1="14" x2="50" y2="6"/>
+              <!-- Diagonal braces between front/back leg pairs -->
+              <line x1="12" y1="24" x2="18" y2="14"/>
+              <line x1="28" y1="20" x2="34" y2="10"/>
+              <line x1="44" y1="16" x2="50" y2="6"/>
+            </g>
+
+            <!-- Panel face (tilted parallelogram). Goes front-left bottom → front-right →
+                 back-right top → back-left, forming the tilted module surface. -->
+            <polygon points="12,24 44,16 50,6 18,14" fill="url(#solarPanel)" stroke="#5eead4" stroke-width="0.45"/>
+
+            <!-- Cell grid: subtle dark lines dividing the panel into modules / cells -->
+            <g stroke="#0a1428" stroke-width="0.3" opacity="0.75" fill="none">
+              <!-- Vertical module divisions (3 modules across) -->
+              <line x1="22.7" y1="21.3" x2="28.7" y2="11.3"/>
+              <line x1="33.3" y1="18.6" x2="39.3" y2="8.6"/>
+              <!-- Horizontal cell midline (sub-division) -->
+              <line x1="15" y1="19" x2="47" y2="11"/>
+            </g>
+
+            <!-- Top-edge highlight glint suggesting glass surface -->
+            <line x1="18" y1="14" x2="50" y2="6" stroke="#5eead4" stroke-width="0.4" opacity="0.55"/>
+
+            <!-- Sun-glint reflection (used by panel-glint animation) -->
+            <polygon class="panel-glint" points="29,17 36,13 42,15 35,19" fill="#fbbf24" opacity="0.22"/>
+          </symbol>
+
+          <!-- Wind Turbine — realistic: tapered tubular tower, 3-face nacelle box,
+               bullet-shaped hub/nose cone, three tapered blades spinning from hub.
+               viewBox 0 0 100 220. Hub kept near x=50 so all turbine `<use>` placements
+               remain visually similar to before. -->
+          <symbol id="wind-turbine" viewBox="0 0 100 220">
+            <!-- Foundation pad — subtle ellipse anchoring the tower to the ground -->
+            <ellipse cx="50" cy="218" rx="9" ry="2" fill="#0f172a" opacity="0.65"/>
+
+            <!-- Tubular tower (tapered: 12u wide at base, 6u at top). Lateral tube gradient
+                 creates the illusion of a cylindrical 3D surface. -->
+            <polygon points="44,218 56,218 53,55 47,55" fill="url(#towerTube)" stroke="#334155" stroke-width="0.4"/>
+
+            <!-- Subtle horizontal seam lines suggesting tower sections (3 segments) -->
+            <g stroke="#334155" stroke-width="0.3" opacity="0.45">
+              <line x1="45.5" y1="170" x2="54.5" y2="170"/>
+              <line x1="46"   y1="125" x2="54"   y2="125"/>
+              <line x1="46.5" y1="85"  x2="53.5" y2="85"/>
+            </g>
+
+            <!-- Access door at tower base -->
+            <rect x="48.5" y="200" width="3" height="6" fill="#0f172a" stroke="#475569" stroke-width="0.25"/>
+
+            <!-- Yaw bearing where the tower meets the nacelle -->
+            <ellipse cx="50" cy="55" rx="4.5" ry="1.5" fill="#94a3b8" stroke="#334155" stroke-width="0.35"/>
+
+            <!-- Nacelle: iso 3-face box. Hub mounts on the FRONT (left side from viewer).
+                 Nacelle extends rearward (to the right) revealing top + right side. -->
+            <!-- Front face (the wide rectangular face visible to the viewer) -->
+            <polygon points="46,46 64,46 64,55 46,55" fill="#cbd5e1" stroke="#334155" stroke-width="0.35"/>
+            <!-- Top face (iso skew) -->
+            <polygon points="46,46 64,46 68,43 50,43" fill="#e2e8f0" stroke="#334155" stroke-width="0.3"/>
+            <!-- Right side face (gives 3D depth) -->
+            <polygon points="64,46 68,43 68,52 64,55" fill="#94a3b8" stroke="#334155" stroke-width="0.3"/>
+
+            <!-- Cooling vent grilles on nacelle front -->
+            <g stroke="#475569" stroke-width="0.3">
+              <line x1="54" y1="49.5" x2="62" y2="49.5"/>
+              <line x1="54" y1="51.5" x2="62" y2="51.5"/>
+            </g>
+
+            <!-- Red aviation warning beacon (pulses) -->
+            <circle cx="55" cy="43.5" r="0.85" fill="#f87171" class="pulse-dot"/>
+
+            <!-- Hub / nose cone — bullet shape at front of nacelle -->
+            <ellipse cx="44" cy="50" rx="3.2" ry="3.4" fill="#cbd5e1" stroke="#334155" stroke-width="0.35"/>
+
+            <!-- Rotor blade group — spins around hub center (44, 50). All 3 blades are
+                 identical tapered polygons; only their rotate() differs.
+                 NOTE: transform-box is set to `view-box` (not `fill-box`) so that
+                 transform-origin 44px 50px maps to actual SVG coordinates (44, 50),
+                 i.e., the hub center. With `fill-box` the origin would be interpreted
+                 against the triangular bounding box of the splayed blades, which
+                 silently shifts the rotation center off-hub and produces a visible wobble. -->
+            <g class="turbine-blade" style="transform-box: view-box; transform-origin: 44px 50px;">
+              <!-- Blade 1 (12 o'clock): root 3u wide at hub, tapers to 0.8u at tip (44, -10) -->
+              <polygon points="42.5,50 45.5,50 44.4,-10 43.6,-10" fill="#e2e8f0" stroke="#94a3b8" stroke-width="0.25"/>
+              <!-- Blade 2: same polygon rotated 120° around hub -->
+              <polygon points="42.5,50 45.5,50 44.4,-10 43.6,-10" fill="#e2e8f0" stroke="#94a3b8" stroke-width="0.25" transform="rotate(120 44 50)"/>
+              <!-- Blade 3: rotated 240° -->
+              <polygon points="42.5,50 45.5,50 44.4,-10 43.6,-10" fill="#e2e8f0" stroke="#94a3b8" stroke-width="0.25" transform="rotate(240 44 50)"/>
+              <!-- Hub cap drawn last so it sits on top of blade roots, hiding the seam -->
+              <circle cx="44" cy="50" r="2.6" fill="#94a3b8" stroke="#334155" stroke-width="0.4"/>
+              <circle cx="44" cy="50" r="1"   fill="#5eead4"/>
+            </g>
+          </symbol>
+
+          <!-- Inverter container (looks like containerised inverter station) -->
+          <symbol id="inverter-station" viewBox="0 0 60 50">
+            <polygon points="6,30 30,18 54,30 30,42" fill="url(#bldgR)" stroke="#fb923c" stroke-width="0.7"/>
+            <polygon points="6,30 30,42 30,48 6,36" fill="#0a1322" stroke="#fb923c" stroke-width="0.5"/>
+            <polygon points="54,30 30,42 30,48 54,36" fill="#15264a" stroke="#fb923c" stroke-width="0.5"/>
+            <!-- Door / vent -->
+            <rect x="13" y="36" width="3" height="6" fill="#fb923c" opacity="0.4"/>
+            <rect x="20" y="38" width="3" height="6" fill="#fb923c" opacity="0.3"/>
+            <!-- DC/AC marker -->
+            <text x="30" y="30" font-family="JetBrains Mono" font-size="6" fill="#fb923c" text-anchor="middle" opacity="0.9">≡/~</text>
+            <circle cx="30" cy="35" r="0.8" fill="#fbbf24" class="pulse-dot"/>
+          </symbol>
+
+          <!-- Step-up Transformer (detailed, used inside substations and at generation edges) -->
+          <symbol id="step-up-tx" viewBox="0 0 70 80">
+            <!-- Cooling radiators (left) -->
+            <line x1="8" y1="45" x2="8" y2="65" stroke="#94a3b8" stroke-width="0.8"/>
+            <line x1="11" y1="46" x2="11" y2="66" stroke="#94a3b8" stroke-width="0.8"/>
+            <line x1="14" y1="47" x2="14" y2="67" stroke="#94a3b8" stroke-width="0.8"/>
+            <!-- Main tank top -->
+            <polygon points="14,40 34,28 60,40 40,52" fill="url(#txBody)" stroke="#a78bfa" stroke-width="0.9"/>
+            <!-- Left face -->
+            <polygon points="14,40 40,52 40,72 14,60" fill="#0a1322" stroke="#a78bfa" stroke-width="0.7"/>
+            <!-- Right face -->
+            <polygon points="60,40 40,52 40,72 60,60" fill="#162540" stroke="#a78bfa" stroke-width="0.7"/>
+            <!-- Bushings (high voltage) -->
+            <line x1="22" y1="36" x2="22" y2="22" stroke="#cbd5e1" stroke-width="1.4"/>
+            <ellipse cx="22" cy="20" rx="1.6" ry="1" fill="#a78bfa"/>
+            <line x1="34" y1="28" x2="34" y2="14" stroke="#cbd5e1" stroke-width="1.4"/>
+            <ellipse cx="34" cy="12" rx="1.6" ry="1" fill="#a78bfa"/>
+            <line x1="46" y1="34" x2="46" y2="20" stroke="#cbd5e1" stroke-width="1.4"/>
+            <ellipse cx="46" cy="18" rx="1.6" ry="1" fill="#a78bfa"/>
+            <!-- Conservator -->
+            <ellipse cx="38" cy="34" rx="6" ry="2" fill="#475569" stroke="#a78bfa" stroke-width="0.5"/>
+            <!-- LED -->
+            <circle cx="36" cy="58" r="1" fill="#a78bfa" class="pulse-dot"/>
+          </symbol>
+
+          <!-- Pad-mounted transformer (small, simpler - for solar/wind site edges) -->
+          <symbol id="pad-tx" viewBox="0 0 50 50">
+            <polygon points="8,25 24,17 42,25 26,33" fill="url(#txBody)" stroke="#a78bfa" stroke-width="0.7"/>
+            <polygon points="8,25 26,33 26,44 8,36" fill="#0a1322" stroke="#a78bfa" stroke-width="0.6"/>
+            <polygon points="42,25 26,33 26,44 42,36" fill="#162540" stroke="#a78bfa" stroke-width="0.6"/>
+            <line x1="16" y1="22" x2="16" y2="14" stroke="#a78bfa" stroke-width="1"/>
+            <circle cx="16" cy="13" r="1.2" fill="#a78bfa"/>
+            <line x1="24" y1="17" x2="24" y2="8" stroke="#a78bfa" stroke-width="1"/>
+            <circle cx="24" cy="7" r="1.2" fill="#a78bfa"/>
+            <line x1="32" y1="21" x2="32" y2="13" stroke="#a78bfa" stroke-width="1"/>
+            <circle cx="32" cy="12" r="1.2" fill="#a78bfa"/>
+          </symbol>
+
+          <!-- HT Lattice Transmission Tower (tall, multi-arm).
+               No "feet" lines below the lattice body — the ground absorbs the
+               tower base visually so the body extends cleanly down. -->
+          <symbol id="lattice-tower" viewBox="0 0 80 240">
+            <!-- Lattice body (X pattern up the mast) -->
+            <g stroke="#94a3b8" stroke-width="0.6" fill="none">
+              <path d="M30,180 L50,160 M50,180 L30,160"/>
+              <path d="M32,160 L48,140 M48,160 L32,140"/>
+              <path d="M33,140 L47,120 M47,140 L33,120"/>
+              <path d="M34,120 L46,100 M46,120 L34,100"/>
+              <path d="M35,100 L45,80  M45,100 L35,80"/>
+              <line x1="30" y1="180" x2="40" y2="80" />
+              <line x1="50" y1="180" x2="40" y2="80" />
+            </g>
+            <!-- Top mast -->
+            <line x1="40" y1="80" x2="40" y2="35" stroke="#cbd5e1" stroke-width="1.2"/>
+            <!-- Crossarms (3 levels) -->
+            <line x1="12" y1="50" x2="68" y2="50" stroke="#cbd5e1" stroke-width="1.2"/>
+            <line x1="16" y1="68" x2="64" y2="68" stroke="#cbd5e1" stroke-width="1.2"/>
+            <line x1="20" y1="86" x2="60" y2="86" stroke="#cbd5e1" stroke-width="1.2"/>
+            <!-- Insulator strings hanging from crossarms -->
+            <line x1="16" y1="50" x2="16" y2="56" stroke="#94a3b8" stroke-width="0.6"/>
+            <circle cx="16" cy="56" r="1.5" fill="#fde047"/>
+            <line x1="64" y1="50" x2="64" y2="56" stroke="#94a3b8" stroke-width="0.6"/>
+            <circle cx="64" cy="56" r="1.5" fill="#fde047"/>
+            <line x1="20" y1="68" x2="20" y2="74" stroke="#94a3b8" stroke-width="0.6"/>
+            <circle cx="20" cy="74" r="1.5" fill="#fde047"/>
+            <line x1="60" y1="68" x2="60" y2="74" stroke="#94a3b8" stroke-width="0.6"/>
+            <circle cx="60" cy="74" r="1.5" fill="#fde047"/>
+            <line x1="24" y1="86" x2="24" y2="92" stroke="#94a3b8" stroke-width="0.6"/>
+            <circle cx="24" cy="92" r="1.5" fill="#fde047"/>
+            <line x1="56" y1="86" x2="56" y2="92" stroke="#94a3b8" stroke-width="0.6"/>
+            <circle cx="56" cy="92" r="1.5" fill="#fde047"/>
+            <!-- Top warning beacon -->
+            <circle cx="40" cy="33" r="2" fill="#f87171" class="pulse-dot"/>
+          </symbol>
+
+          <!-- Distribution pole (smaller, for solar→PSS and GSS→clients) -->
+          <symbol id="dist-pole" viewBox="0 0 40 120">
+            <line x1="20" y1="120" x2="20" y2="40" stroke="#94a3b8" stroke-width="1.2"/>
+            <!-- Crossarm -->
+            <line x1="6" y1="50" x2="34" y2="50" stroke="#cbd5e1" stroke-width="1.2"/>
+            <line x1="10" y1="62" x2="30" y2="62" stroke="#cbd5e1" stroke-width="1"/>
+            <!-- Insulators -->
+            <circle cx="8" cy="48" r="1.2" fill="#fde047"/>
+            <circle cx="20" cy="48" r="1.2" fill="#fde047"/>
+            <circle cx="32" cy="48" r="1.2" fill="#fde047"/>
+            <circle cx="11" cy="60" r="1" fill="#fde047"/>
+            <circle cx="29" cy="60" r="1" fill="#fde047"/>
+          </symbol>
+
+          <!-- Control building (small iso office) -->
+          <symbol id="control-bldg" viewBox="0 0 80 60">
+            <polygon points="10,30 40,18 70,30 40,42" fill="#1e293b" stroke="#4ade80" stroke-width="0.7"/>
+            <polygon points="10,30 40,42 40,55 10,43" fill="url(#bldgL)" stroke="#4ade80" stroke-width="0.6"/>
+            <polygon points="70,30 40,42 40,55 70,43" fill="url(#bldgR)" stroke="#4ade80" stroke-width="0.6"/>
+            <!-- Windows -->
+            <polygon points="16,37 22,39 22,45 16,43" fill="#4ade80" opacity="0.5"/>
+            <polygon points="26,41 32,43 32,49 26,47" fill="#4ade80" opacity="0.4"/>
+            <polygon points="58,37 64,35 64,41 58,43" fill="#4ade80" opacity="0.5"/>
+            <polygon points="48,41 54,39 54,45 48,47" fill="#4ade80" opacity="0.4"/>
+            <!-- Antenna -->
+            <line x1="40" y1="18" x2="40" y2="10" stroke="#4ade80" stroke-width="0.8"/>
+            <circle cx="40" cy="9" r="1" fill="#4ade80" class="pulse-dot"/>
+          </symbol>
+
+          <!-- Industrial client building -->
+          <symbol id="client-industrial" viewBox="0 0 90 70">
+            <polygon points="6,35 45,16 84,35 45,54" fill="#1e293b" stroke="#f472b6" stroke-width="0.7"/>
+            <polygon points="6,35 45,54 45,66 6,47" fill="url(#bldgL)" stroke="#f472b6" stroke-width="0.6"/>
+            <polygon points="84,35 45,54 45,66 84,47" fill="url(#bldgR)" stroke="#f472b6" stroke-width="0.6"/>
+            <!-- Roof vents -->
+            <polygon points="22,28 34,22 36,24 24,30" fill="#0f172a" stroke="#f472b6" stroke-width="0.4"/>
+            <polygon points="54,22 66,16 68,18 56,24" fill="#0f172a" stroke="#f472b6" stroke-width="0.4"/>
+            <!-- Loading bay window strip -->
+            <line x1="14" y1="44" x2="40" y2="57" stroke="#f472b6" stroke-width="0.4" opacity="0.5"/>
+            <line x1="50" y1="57" x2="76" y2="44" stroke="#f472b6" stroke-width="0.4" opacity="0.5"/>
+            <polygon points="12,42 20,46 20,52 12,48" fill="#f472b6" opacity="0.45"/>
+            <polygon points="68,42 76,38 76,44 68,48" fill="#f472b6" opacity="0.45"/>
+          </symbol>
+
+          <!-- Commercial tall building -->
+          <symbol id="client-commercial" viewBox="0 0 60 100">
+            <polygon points="6,40 30,26 54,40 30,54" fill="#1e293b" stroke="#f472b6" stroke-width="0.7"/>
+            <polygon points="6,40 30,54 30,95 6,81" fill="url(#bldgL)" stroke="#f472b6" stroke-width="0.6"/>
+            <polygon points="54,40 30,54 30,95 54,81" fill="url(#bldgR)" stroke="#f472b6" stroke-width="0.6"/>
+            <!-- Window rows left -->
+            <g fill="#f472b6">
+              <polygon points="10,46 14,48 14,52 10,50" opacity="0.5"/>
+              <polygon points="16,49 20,51 20,55 16,53" opacity="0.4"/>
+              <polygon points="22,52 26,54 26,58 22,56" opacity="0.5"/>
+              <polygon points="10,58 14,60 14,64 10,62" opacity="0.4"/>
+              <polygon points="16,61 20,63 20,67 16,65" opacity="0.5"/>
+              <polygon points="22,64 26,66 26,70 22,68" opacity="0.4"/>
+              <polygon points="10,70 14,72 14,76 10,74" opacity="0.5"/>
+              <polygon points="16,73 20,75 20,79 16,77" opacity="0.4"/>
+            </g>
+            <!-- Window rows right -->
+            <g fill="#f472b6">
+              <polygon points="50,46 46,48 46,52 50,50" opacity="0.5"/>
+              <polygon points="44,49 40,51 40,55 44,53" opacity="0.4"/>
+              <polygon points="38,52 34,54 34,58 38,56" opacity="0.5"/>
+              <polygon points="50,58 46,60 46,64 50,62" opacity="0.4"/>
+              <polygon points="44,61 40,63 40,67 44,65" opacity="0.5"/>
+              <polygon points="50,70 46,72 46,76 50,74" opacity="0.5"/>
+              <polygon points="44,73 40,75 40,79 44,77" opacity="0.4"/>
+            </g>
+          </symbol>
+        </defs>
+
+        <!-- ================= MAIN SCENE ================= -->
+
+        <!-- Ground baseplate — single iso ground plane (parallelogram).
+             Back edge at y=320 (where wind-farm + GSS sit furthest from viewer),
+             front edge at y=780 (where solar + clients are closest).
+             The slight left-right skew gives subtle iso depth without the old tent-peak. -->
+        <polygon points="0,340 1600,300 1600,780 0,780" fill="url(#groundGrad)"/>
+        <!-- Soft horizon edge highlight -->
+        <line x1="0" y1="340" x2="1600" y2="300" stroke="rgba(94, 234, 212, 0.10)" stroke-width="0.6"/>
+
+        <!-- Subtle iso depth grid (kept inside the new ground, no lines escaping into sky) -->
+        <g stroke="rgba(94, 234, 212, 0.05)" stroke-width="0.5" fill="none">
+          <!-- Diagonal "depth" lines going up-right (iso-style receding into back) -->
+          <line x1="100" y1="780" x2="500"  y2="370"/>
+          <line x1="350" y1="780" x2="750"  y2="360"/>
+          <line x1="600" y1="780" x2="1000" y2="350"/>
+          <line x1="850" y1="780" x2="1250" y2="340"/>
+          <line x1="1100" y1="780" x2="1500" y2="330"/>
+          <!-- Horizontal "width" lines -->
+          <line x1="0" y1="440" x2="1600" y2="423" opacity="0.5"/>
+          <line x1="0" y1="540" x2="1600" y2="528" opacity="0.4"/>
+          <line x1="0" y1="640" x2="1600" y2="633" opacity="0.3"/>
+          <line x1="0" y1="720" x2="1600" y2="717" opacity="0.2"/>
+        </g>
+
+        <!-- Integrated zone tints (subtle, on the ground, no harsh borders) -->
+        <g id="ground-zones">
+          <!-- Solar farm zone tint — aligned to actual array iso slopes.
+               Array width direction has slope -0.289 (panel-to-panel offset 45,-13 within row)
+               and depth slope +0.767 (row-to-row offset 30,+23). The 4 array footprint corners
+               (front-leg bases of corner panels) are (91,587) (316,522) (436,614) (211,679).
+               Tint extends this footprint outward by ~20-30 units in each direction. -->
+          <polygon points="60,602 332,524 462,624 190,702" fill="rgba(251, 146, 60, 0.05)"/>
+          <polygon points="60,602 332,524 462,624 190,702" fill="none" stroke="rgba(251, 146, 60, 0.18)" stroke-width="0.6"/>
+
+          <!-- Transmission right-of-way — cleared yellow-tinted strip BENEATH tower bases.
+               Tower bases run: PSS-out gantry ~(940,515) → T1 base (1027,510) → T2 (1117,470)
+               → T3 (1207,435) → T4 (1297,405) → GSS-in gantry (1360,400). The strip mirrors
+               this slope on the ground, suggesting cleared transmission corridor land. -->
+          <polygon points="950,540 1340,415 1395,440 1010,565" fill="rgba(253, 224, 71, 0.04)"/>
+          <polygon points="950,540 1340,415 1395,440 1010,565" fill="none" stroke="rgba(253, 224, 71, 0.16)" stroke-width="0.5"/>
+          <!-- Center line of right-of-way (dashed, follows tower line) -->
+          <line x1="980" y1="552" x2="1370" y2="427" stroke="rgba(253, 224, 71, 0.12)" stroke-width="0.4" stroke-dasharray="6 8"/>
+
+          <!-- Land bank — expanded to fully enclose all 8 client buildings.
+               Buildings bbox is x=1240-1548 / y=555-732. New polygon corners with padding
+               give x=1180-1620 / y=510-785, comfortably containing every building. -->
+          <polygon points="1180,555 1580,510 1620,740 1220,785" fill="rgba(244, 114, 182, 0.05)"/>
+          <polygon points="1180,555 1580,510 1620,740 1220,785" fill="none" stroke="rgba(244, 114, 182, 0.20)" stroke-width="0.6"/>
+          <!-- Subtle interior subdivision lines suggesting parcel grid -->
+          <g stroke="rgba(244, 114, 182, 0.10)" stroke-width="0.4" fill="none">
+            <line x1="1290" y1="610" x2="1395" y2="700"/>
+            <line x1="1400" y1="555" x2="1505" y2="640"/>
+            <line x1="1220" y1="700" x2="1580" y2="555"/>
+          </g>
+        </g>
+
+        <!-- Focus glow (moves between chapters; sits on the ground, above zones, behind assets) -->
+        <g id="focus-glow-group">
+          <ellipse id="focus-glow" class="focus-glow" cx="280" cy="600" rx="320" ry="160" fill="url(#focusOrange)"/>
+          <ellipse id="focus-glow-2" class="focus-glow" cx="0" cy="0" rx="80" ry="50" fill="url(#focusPurple)" opacity="0"/>
+          <ellipse id="focus-glow-3" class="focus-glow" cx="0" cy="0" rx="80" ry="50" fill="url(#focusPurple)" opacity="0"/>
+        </g>
+
+        <!-- =================== WIND FARM (back-left, on main ground) =================== -->
+        <g id="zone-wind">
+          <!-- Wind farm zone tint — encloses the actual turbine base cluster + pad-transformer.
+               Turbines arrange in a near-horizontal row (bases at y≈378-388), so this zone is
+               a shallow parallelogram with very slight skew, not the steep iso slope used by
+               the solar array. Verified to enclose all 7 turbine bases + pad-tx at (455, 420). -->
+          <polygon points="20,360 490,330 510,435 40,465" fill="rgba(94, 234, 212, 0.04)"/>
+          <polygon points="20,360 490,330 510,435 40,465" fill="none" stroke="rgba(94, 234, 212, 0.18)" stroke-width="0.6"/>
+
+          <!-- Wind turbines planted directly on the ground, bases ~y=408-418
+               (positioned on the wind base plane, lower portion of zone) -->
+          <use href="#wind-turbine" x="40"  y="210" width="55" height="200"/>
+          <use href="#wind-turbine" x="120" y="190" width="60" height="220"/>
+          <use href="#wind-turbine" x="220" y="200" width="58" height="210"/>
+          <use href="#wind-turbine" x="320" y="220" width="55" height="200"/>
+          <use href="#wind-turbine" x="400" y="230" width="52" height="190"/>
+          <!-- Smaller secondary turbines for visual depth -->
+          <use href="#wind-turbine" x="170" y="250" width="42" height="160"/>
+          <use href="#wind-turbine" x="280" y="270" width="42" height="150"/>
+
+          <!-- Collector pad-transformer at edge of wind farm (feeds into transmission) -->
+          <use href="#pad-tx" x="430" y="380" width="50" height="50"/>
+          <!-- Underground collector cables between turbine bases to the pad-tx (y shifted with turbines) -->
+          <g stroke="#5eead4" stroke-width="0.7" opacity="0.4" fill="none" stroke-dasharray="3 4">
+            <path d="M70,418 L150,416 L260,416 L360,418 L440,426"/>
+          </g>
+        </g>
+
+        <!-- =================== SOLAR FARM (foreground-left) =================== -->
+        <g id="zone-solar">
+          <!-- (Zone tint is in #ground-zones above; no separate land patch here.) -->
+
+          <!-- Solar panel array (denser, more realistic) -->
+          <g id="solar-array">
+            <!-- Row 1 (back) -->
+            <use href="#solar-panel" x="80"  y="555" width="55" height="38"/>
+            <use href="#solar-panel" x="125" y="542" width="55" height="38"/>
+            <use href="#solar-panel" x="170" y="529" width="55" height="38"/>
+            <use href="#solar-panel" x="215" y="516" width="55" height="38"/>
+            <use href="#solar-panel" x="260" y="503" width="55" height="38"/>
+            <use href="#solar-panel" x="305" y="490" width="55" height="38"/>
+            <!-- Row 2 -->
+            <use href="#solar-panel" x="110" y="578" width="55" height="38"/>
+            <use href="#solar-panel" x="155" y="565" width="55" height="38"/>
+            <use href="#solar-panel" x="200" y="552" width="55" height="38"/>
+            <use href="#solar-panel" x="245" y="539" width="55" height="38"/>
+            <use href="#solar-panel" x="290" y="526" width="55" height="38"/>
+            <use href="#solar-panel" x="335" y="513" width="55" height="38"/>
+            <!-- Row 3 -->
+            <use href="#solar-panel" x="140" y="601" width="55" height="38"/>
+            <use href="#solar-panel" x="185" y="588" width="55" height="38"/>
+            <use href="#solar-panel" x="230" y="575" width="55" height="38"/>
+            <use href="#solar-panel" x="275" y="562" width="55" height="38"/>
+            <use href="#solar-panel" x="320" y="549" width="55" height="38"/>
+            <use href="#solar-panel" x="365" y="536" width="55" height="38"/>
+            <!-- Row 4 -->
+            <use href="#solar-panel" x="170" y="624" width="55" height="38"/>
+            <use href="#solar-panel" x="215" y="611" width="55" height="38"/>
+            <use href="#solar-panel" x="260" y="598" width="55" height="38"/>
+            <use href="#solar-panel" x="305" y="585" width="55" height="38"/>
+            <use href="#solar-panel" x="350" y="572" width="55" height="38"/>
+            <use href="#solar-panel" x="395" y="559" width="55" height="38"/>
+            <!-- Row 5 (front) -->
+            <use href="#solar-panel" x="200" y="647" width="55" height="38"/>
+            <use href="#solar-panel" x="245" y="634" width="55" height="38"/>
+            <use href="#solar-panel" x="290" y="621" width="55" height="38"/>
+            <use href="#solar-panel" x="335" y="608" width="55" height="38"/>
+            <use href="#solar-panel" x="380" y="595" width="55" height="38"/>
+            <use href="#solar-panel" x="425" y="582" width="55" height="38"/>
+          </g>
+
+          <!-- DC string cables from panels heading toward inverter row (suggesting bundling) -->
+          <g stroke="#fb923c" stroke-width="0.7" opacity="0.4" fill="none">
+            <path d="M430,610 L495,615"/>
+            <path d="M445,640 L500,635"/>
+            <path d="M460,665 L505,655"/>
+          </g>
+
+          <!-- Inverter row at the edge of solar field -->
+          <use href="#inverter-station" x="490" y="600" width="60" height="50"/>
+          <use href="#inverter-station" x="520" y="618" width="60" height="50"/>
+          <use href="#inverter-station" x="550" y="636" width="60" height="50"/>
+
+          <!-- Step-up transformer for solar farm output -->
+          <use href="#step-up-tx" x="600" y="630" width="60" height="65"/>
+
+          <!-- ONE distribution pole between solar tx and PSS yard (positioned just outside PSS yard front-left edge) -->
+          <use href="#dist-pole" x="668" y="555" width="25" height="88"/>
+        </g>
+
+        <!-- =================== INTERNAL TRANSMISSION (Wind → PSS, Solar → PSS) =================== -->
+        <!-- All conductor endpoints are computed to attach precisely to each tower's insulator points.
+             Lattice tower symbol (viewBox 80×240) has insulators at internal (16,56)/(64,56), (20,74)/(60,74), (24,92)/(56,92).
+             Each segment uses a quadratic Bezier with subtle catenary sag (~2-3px). -->
+        <g id="internal-transmission">
+
+          <!-- ---- WIND COLLECTOR → PSS ---- -->
+          <!-- Lattice towers carrying the wind feeder -->
+          <use href="#lattice-tower" x="490" y="340" width="55" height="200"/>
+          <use href="#lattice-tower" x="580" y="380" width="55" height="195"/>
+
+          <!-- Wind feeder: 3 conductors, each broken into 3 spans (pad-tx → T1 → T2 → PSS gantry).
+               Endpoints attach to insulator points calculated from tower placements. -->
+          <g stroke="#5eead4" stroke-width="0.9" opacity="0.6" fill="none">
+            <!-- Span A: pad-tx bushings → Wind T1 left insulators -->
+            <path d="M 446,393 Q 473.5,395 501,386.7"/>
+            <path d="M 454,387 Q 478.9,398 503.75,401.7"/>
+            <path d="M 462,392 Q 484.25,408 506.5,416.7"/>
+
+            <!-- Span B: Wind T1 right insulators → Wind T2 left insulators -->
+            <path d="M 534,386.7 Q 562.5,410 591,425.5"/>
+            <path d="M 531.25,401.7 Q 562.5,425 593.75,440.1"/>
+            <path d="M 528.5,416.7 Q 562.5,440 596.5,454.8"/>
+
+            <!-- Span C: Wind T2 right insulators → PSS incoming gantry left insulators -->
+            <path d="M 624,425.5 Q 641,419 658,406.2"/>
+            <path d="M 621.25,440.1 Q 640.6,432 660,417.8"/>
+            <path d="M 618.5,454.8 Q 640.25,445 662,429.4"/>
+          </g>
+          <!-- Wind feeder animated flow pulse following the MID conductor across all 3 spans -->
+          <path d="M 454,387 Q 478.9,398 503.75,401.7 L 531.25,401.7 Q 562.5,425 593.75,440.1 L 621.25,440.1 Q 640.6,432 660,417.8"
+                stroke="#5eead4" stroke-width="1.5" fill="none" class="flow-line" opacity="0.85"/>
+
+          <!-- ---- SOLAR → PSS ---- -->
+          <!-- MV feeder: 3 conductors via 1 distribution pole, then into a dedicated MV
+               incoming bay inside the PSS yard at the FRONT-LEFT corner. Endpoints are
+               separate from the wind feeder's left-gantry insulators, so the two
+               generation feeders no longer visually merge. -->
+          <g stroke="#fb923c" stroke-width="0.8" opacity="0.6" fill="none">
+            <!-- Span A: solar tx bushings → dist pole upper insulators (rising span, unchanged) -->
+            <path d="M 618.9,646.3 Q 646,621 673,590"/>
+            <path d="M 629.1,639.8 Q 654.8,615 680.5,590"/>
+            <path d="M 639.4,644.6 Q 663.7,617 688,590"/>
+
+            <!-- Span B (revised): dist pole upper insulators → PSS front-left MV incoming bay
+                 (terminates inside PSS yard, well before the left HT gantry). -->
+            <path d="M 673,590 Q 679,570 685,545"/>
+            <path d="M 680.5,590 Q 685.25,570 690,545"/>
+            <path d="M 688,590 Q 691.5,570 695,545"/>
+          </g>
+          <!-- Solar feeder flow pulse (mid conductor through pole into PSS incoming bay) -->
+          <path d="M 629.1,639.8 Q 654.8,615 680.5,590 Q 685.25,570 690,545"
+                stroke="#fb923c" stroke-width="1.5" fill="none" class="flow-line" opacity="0.85"/>
+        </g>
+
+        <!-- =================== PSS COMPOUND (center) =================== -->
+        <g id="zone-pss">
+          <!-- Compound floor (slightly elevated platform) -->
+          <polygon points="660,540 920,420 1000,460 740,580" fill="rgba(74, 222, 128, 0.05)" stroke="rgba(74, 222, 128, 0.40)" stroke-width="1"/>
+          <!-- Inner yard slightly darker -->
+          <polygon points="680,545 910,432 985,463 750,575" fill="#0a1424" stroke="rgba(74, 222, 128, 0.20)" stroke-width="0.5"/>
+
+          <!-- Dashed fence around perimeter -->
+          <polygon points="660,540 920,420 1000,460 740,580" fill="none" stroke="#4ade80" stroke-width="0.6" stroke-dasharray="3 3" opacity="0.6"/>
+
+          <!-- Dead-end gantry (incoming) - small lattice -->
+          <use href="#lattice-tower" x="650" y="370" width="40" height="155"/>
+
+          <!-- Solar feeder MV-incoming bay (front-left of PSS yard).
+               Small dead-end pole where the 3 solar conductors terminate, then short
+               internal cable connects to PSS bus bar. -->
+          <g stroke="#94a3b8" stroke-width="0.7" fill="none">
+            <!-- Vertical mast -->
+            <line x1="690" y1="545" x2="690" y2="578"/>
+            <!-- Crossarm holding the 3 incoming insulators -->
+            <line x1="682" y1="545" x2="700" y2="545"/>
+          </g>
+          <!-- 3 yellow insulators at the dead-end (matches solar conductor endpoints above) -->
+          <circle cx="685" cy="545" r="1.3" fill="#fde047"/>
+          <circle cx="690" cy="545" r="1.3" fill="#fde047"/>
+          <circle cx="695" cy="545" r="1.3" fill="#fde047"/>
+          <!-- Short internal cable from incoming bay to PSS bus bar (suggests MV→bus connection) -->
+          <g stroke="#fb923c" stroke-width="0.6" opacity="0.55" fill="none">
+            <path d="M 690,548 L 720,510 L 755,470"/>
+          </g>
+
+          <!-- Step-up transformers inside PSS (3 of them, in iso row) -->
+          <use href="#step-up-tx" x="730" y="465" width="55" height="62"/>
+          <use href="#step-up-tx" x="800" y="445" width="55" height="62"/>
+          <use href="#step-up-tx" x="870" y="425" width="55" height="62"/>
+
+          <!-- Bus bars (parallel lines connecting transformers above) -->
+          <g stroke="#4ade80" stroke-width="1" opacity="0.7" fill="none">
+            <path d="M755,470 L825,450 L895,430"/>
+            <path d="M758,478 L828,458 L898,438"/>
+          </g>
+          <g stroke="#a78bfa" stroke-width="0.6" opacity="0.5" fill="none">
+            <!-- Bushing connections from each transformer to bus bar -->
+            <line x1="752" y1="478" x2="752" y2="462"/>
+            <line x1="822" y1="458" x2="822" y2="442"/>
+            <line x1="892" y1="438" x2="892" y2="422"/>
+          </g>
+
+          <!-- Dead-end gantry (outgoing toward GSS) -->
+          <use href="#lattice-tower" x="920" y="360" width="40" height="155"/>
+
+          <!-- Control building inside PSS -->
+          <use href="#control-bldg" x="710" y="535" width="65" height="48"/>
+
+          <!-- PSS Label -->
+          <text x="830" y="600" font-family="Orbitron" font-size="11" font-weight="700" fill="#4ade80" text-anchor="middle" letter-spacing="2" opacity="0.85">PSS</text>
+        </g>
+
+        <!-- =================== HT TRANSMISSION CORRIDOR (PSS → GSS) =================== -->
+        <!-- 5 spans × 3 conductors (top, mid, bot). All endpoints attach to actual insulator
+             points of the 4 lattice towers + PSS outgoing gantry + GSS incoming gantry. -->
+        <g id="zone-transmission">
+          <!-- Tall lattice towers along the corridor going up-right -->
+          <use href="#lattice-tower" x="1000" y="290" width="55" height="220"/>
+          <use href="#lattice-tower" x="1090" y="250" width="55" height="220"/>
+          <use href="#lattice-tower" x="1180" y="215" width="55" height="220"/>
+          <use href="#lattice-tower" x="1270" y="185" width="55" height="220"/>
+
+          <!-- 3 conductors (top/mid/bot), each as 5 separate spans connecting insulator-to-insulator with subtle catenary sag -->
+          <g stroke="#fde047" stroke-width="0.9" opacity="0.6" fill="none">
+            <!-- TOP CONDUCTOR -->
+            <path d="M 952,396.2 Q 981.5,373.75 1011,341.3"/>     <!-- PSS-out → T1 -->
+            <path d="M 1044,341.3 Q 1072.5,326.3 1101,301.3"/>     <!-- T1 → T2 -->
+            <path d="M 1134,301.3 Q 1162.5,288.8 1191,266.3"/>     <!-- T2 → T3 -->
+            <path d="M 1224,266.3 Q 1252.5,256.3 1281,236.3"/>     <!-- T3 → T4 -->
+            <path d="M 1314,236.3 Q 1329.5,246.5 1345,246.7"/>     <!-- T4 → GSS-in -->
+
+            <!-- MID CONDUCTOR -->
+            <path d="M 950,407.8 Q 981.9,387.8 1013.75,357.8"/>
+            <path d="M 1041.25,357.8 Q 1072.5,342.8 1103.75,317.8"/>
+            <path d="M 1131.25,317.8 Q 1162.5,305.3 1193.75,282.8"/>
+            <path d="M 1221.25,282.8 Q 1252.5,272.8 1283.75,252.8"/>
+            <path d="M 1311.25,252.8 Q 1329.4,262.25 1347.5,261.7"/>
+
+            <!-- BOT CONDUCTOR -->
+            <path d="M 948,419.4 Q 982.25,401.85 1016.5,374.3"/>
+            <path d="M 1038.5,374.3 Q 1072.5,359.3 1106.5,334.3"/>
+            <path d="M 1128.5,334.3 Q 1162.5,321.8 1196.5,299.3"/>
+            <path d="M 1218.5,299.3 Q 1252.5,289.3 1286.5,269.3"/>
+            <path d="M 1308.5,269.3 Q 1329.25,278 1350,276.7"/>
+          </g>
+
+          <!-- Animated flow pulse following the MID conductor through all 5 spans.
+               Uses L (line) commands across each tower's crossarm so the pulse visually
+               passes THROUGH the tower at the insulator-to-insulator level. -->
+          <path d="M 950,407.8
+                   Q 981.9,387.8 1013.75,357.8
+                   L 1041.25,357.8
+                   Q 1072.5,342.8 1103.75,317.8
+                   L 1131.25,317.8
+                   Q 1162.5,305.3 1193.75,282.8
+                   L 1221.25,282.8
+                   Q 1252.5,272.8 1283.75,252.8
+                   L 1311.25,252.8
+                   Q 1329.4,262.25 1347.5,261.7"
+                stroke="#fde047" stroke-width="1.5" fill="none" class="flow-line" opacity="0.9"/>
+        </g>
+
+        <!-- =================== GSS COMPOUND (right) =================== -->
+        <g id="zone-gss">
+          <!-- Larger compound -->
+          <polygon points="1280,440 1490,330 1580,365 1370,485" fill="rgba(253, 224, 71, 0.05)" stroke="rgba(253, 224, 71, 0.40)" stroke-width="1"/>
+          <polygon points="1290,442 1485,335 1570,366 1380,478" fill="#0c1428" stroke="rgba(253, 224, 71, 0.20)" stroke-width="0.5"/>
+          <polygon points="1280,440 1490,330 1580,365 1370,485" fill="none" stroke="#fde047" stroke-width="0.6" stroke-dasharray="3 3" opacity="0.6"/>
+
+          <!-- Dead-end gantry (incoming HT) -->
+          <use href="#lattice-tower" x="1335" y="200" width="50" height="200"/>
+
+          <!-- Multiple bays - 3 lattice structures inside GSS -->
+          <g stroke="#fde047" stroke-width="0.7" opacity="0.85" fill="none">
+            <!-- Bay 1 lattice -->
+            <polygon points="1340,395 1355,387 1355,360 1340,368"/>
+            <polygon points="1355,387 1370,395 1370,368 1355,360"/>
+            <line x1="1347" y1="368" x2="1347" y2="387"/>
+            <line x1="1363" y1="360" x2="1363" y2="387"/>
+            <!-- Bay 2 lattice -->
+            <polygon points="1395,408 1410,400 1410,370 1395,378"/>
+            <polygon points="1410,400 1425,408 1425,378 1410,370"/>
+            <line x1="1402" y1="378" x2="1402" y2="400"/>
+            <line x1="1418" y1="370" x2="1418" y2="400"/>
+            <!-- Bay 3 lattice -->
+            <polygon points="1450,420 1465,412 1465,380 1450,388"/>
+            <polygon points="1465,412 1480,420 1480,388 1465,380"/>
+            <line x1="1457" y1="388" x2="1457" y2="412"/>
+            <line x1="1473" y1="380" x2="1473" y2="412"/>
+          </g>
+          <!-- Top insulators on bays -->
+          <circle cx="1355" cy="358" r="1.4" fill="#fde047"/>
+          <circle cx="1410" cy="368" r="1.4" fill="#fde047"/>
+          <circle cx="1465" cy="378" r="1.4" fill="#fde047"/>
+          <!-- Bus bars connecting bays -->
+          <g stroke="#fde047" stroke-width="1" opacity="0.85">
+            <line x1="1355" y1="358" x2="1410" y2="368"/>
+            <line x1="1410" y1="368" x2="1465" y2="378"/>
+          </g>
+
+          <!-- Step-down transformers inside GSS -->
+          <use href="#step-up-tx" x="1390" y="425" width="55" height="62"/>
+          <use href="#step-up-tx" x="1460" y="405" width="55" height="62"/>
+
+          <!-- Switchgear (small boxes) -->
+          <g>
+            <polygon points="1335,425 1346,420 1346,438 1335,443" fill="#15264a" stroke="#fde047" stroke-width="0.5"/>
+            <polygon points="1346,420 1357,425 1357,443 1346,438" fill="#0a1322" stroke="#fde047" stroke-width="0.5"/>
+            <circle cx="1346" cy="425" r="0.8" fill="#fde047" class="pulse-dot"/>
+          </g>
+
+          <!-- Control building -->
+          <use href="#control-bldg" x="1500" y="395" width="60" height="44"/>
+
+          <!-- GSS Label -->
+          <text x="1430" y="510" font-family="Orbitron" font-size="11" font-weight="700" fill="#fde047" text-anchor="middle" letter-spacing="2" opacity="0.85">GSS</text>
+
+          <!-- Outgoing distribution lines toward clients (going down-right) -->
+          <use href="#dist-pole" x="1480" y="455" width="30" height="100"/>
+          <use href="#dist-pole" x="1540" y="475" width="30" height="100"/>
+        </g>
+
+        <!-- =================== DISTRIBUTION & CLIENTS (bottom-right) =================== -->
+        <g id="zone-clients">
+          <!-- (Land bank zone is unified in #ground-zones above — no separate floating patches here.) -->
+
+          <!-- Distribution lines from GSS poles to clients -->
+          <g stroke="#f472b6" stroke-width="0.8" opacity="0.50" fill="none">
+            <path d="M1495,490 Q1430,540 1370,600"/>
+            <path d="M1500,498 Q1435,548 1375,608"/>
+            <path d="M1555,512 Q1490,560 1440,620"/>
+            <path d="M1560,520 Q1495,568 1445,628"/>
+          </g>
+          <!-- Flow pulse -->
+          <path d="M1500,498 Q1435,548 1375,608" stroke="#f472b6" stroke-width="1.4" fill="none" class="flow-line slow" opacity="0.85"/>
+
+          <!-- Client buildings (industrial + commercial cluster) -->
+          <use href="#client-industrial" x="1240" y="580" width="80" height="70"/>
+          <use href="#client-commercial" x="1330" y="555" width="55" height="95"/>
+          <use href="#client-industrial" x="1400" y="595" width="75" height="65"/>
+          <use href="#client-commercial" x="1485" y="565" width="55" height="95"/>
+
+          <use href="#client-industrial" x="1255" y="660" width="65" height="58"/>
+          <use href="#client-commercial" x="1340" y="640" width="48" height="82"/>
+          <use href="#client-industrial" x="1410" y="670" width="68" height="60"/>
+          <use href="#client-commercial" x="1500" y="650" width="48" height="82"/>
+        </g>
+
+        <!-- =================== NUMBERED CALLOUTS (always visible) =================== -->
+        <g id="callouts">
+          <!-- Callout 1: SOLAR -->
+          <g class="callout active" id="callout-1" data-chapter="0">
+            <line class="callout-leader" x1="220" y1="500" x2="270" y2="585" stroke="#fb923c" stroke-width="1.2" opacity="0.7" stroke-dasharray="3 3"/>
+            <circle class="callout-halo" cx="220" cy="500" r="22" fill="none" stroke="#fb923c" stroke-width="1.5"/>
+            <circle class="callout-circle-bg" cx="220" cy="500" r="16" fill="#fb923c" fill-opacity="0.92" stroke="#fbbf24" stroke-width="1.5"/>
+            <text class="callout-num" x="220" y="500" dy="5" text-anchor="middle" font-size="16" fill="#04060d">1</text>
+          </g>
+
+          <!-- Callout 2: WIND -->
+          <g class="callout" id="callout-2" data-chapter="1">
+            <line class="callout-leader" x1="100" y1="150" x2="160" y2="250" stroke="#5eead4" stroke-width="1.2" opacity="0.7" stroke-dasharray="3 3"/>
+            <circle class="callout-halo" cx="100" cy="150" r="22" fill="none" stroke="#5eead4" stroke-width="1.5"/>
+            <circle class="callout-circle-bg" cx="100" cy="150" r="16" fill="#5eead4" fill-opacity="0.92" stroke="#a7f3d0" stroke-width="1.5"/>
+            <text class="callout-num" x="100" y="150" dy="5" text-anchor="middle" font-size="16" fill="#04060d">2</text>
+          </g>
+
+          <!-- Callout 3: TRANSFORMERS (points to PSS transformers, but represents fleet across 80 locations) -->
+          <g class="callout" id="callout-3" data-chapter="2">
+            <line class="callout-leader" x1="780" y1="380" x2="810" y2="455" stroke="#a78bfa" stroke-width="1.2" opacity="0.7" stroke-dasharray="3 3"/>
+            <circle class="callout-halo" cx="780" cy="380" r="22" fill="none" stroke="#a78bfa" stroke-width="1.5"/>
+            <circle class="callout-circle-bg" cx="780" cy="380" r="16" fill="#a78bfa" fill-opacity="0.92" stroke="#c4b5fd" stroke-width="1.5"/>
+            <text class="callout-num" x="780" y="380" dy="5" text-anchor="middle" font-size="16" fill="#04060d">3</text>
+          </g>
+
+          <!-- Callout 4: PSS -->
+          <g class="callout" id="callout-4" data-chapter="3">
+            <line class="callout-leader" x1="1000" y1="540" x2="930" y2="500" stroke="#4ade80" stroke-width="1.2" opacity="0.7" stroke-dasharray="3 3"/>
+            <circle class="callout-halo" cx="1000" cy="540" r="22" fill="none" stroke="#4ade80" stroke-width="1.5"/>
+            <circle class="callout-circle-bg" cx="1000" cy="540" r="16" fill="#4ade80" fill-opacity="0.92" stroke="#86efac" stroke-width="1.5"/>
+            <text class="callout-num" x="1000" y="540" dy="5" text-anchor="middle" font-size="16" fill="#04060d">4</text>
+          </g>
+
+          <!-- Callout 5: GRID (GSS + Transmission) -->
+          <g class="callout" id="callout-5" data-chapter="4">
+            <line class="callout-leader" x1="1180" y1="130" x2="1200" y2="225" stroke="#fde047" stroke-width="1.2" opacity="0.7" stroke-dasharray="3 3"/>
+            <circle class="callout-halo" cx="1180" cy="130" r="22" fill="none" stroke="#fde047" stroke-width="1.5"/>
+            <circle class="callout-circle-bg" cx="1180" cy="130" r="16" fill="#fde047" fill-opacity="0.92" stroke="#fef08a" stroke-width="1.5"/>
+            <text class="callout-num" x="1180" y="130" dy="5" text-anchor="middle" font-size="16" fill="#04060d">5</text>
+          </g>
+
+          <!-- Callout 6: LAND & CLIENTS -->
+          <g class="callout" id="callout-6" data-chapter="5">
+            <line class="callout-leader" x1="1540" y1="710" x2="1430" y2="660" stroke="#f472b6" stroke-width="1.2" opacity="0.7" stroke-dasharray="3 3"/>
+            <circle class="callout-halo" cx="1540" cy="710" r="22" fill="none" stroke="#f472b6" stroke-width="1.5"/>
+            <circle class="callout-circle-bg" cx="1540" cy="710" r="16" fill="#f472b6" fill-opacity="0.92" stroke="#fbcfe8" stroke-width="1.5"/>
+            <text class="callout-num" x="1540" y="710" dy="5" text-anchor="middle" font-size="16" fill="#04060d">6</text>
+          </g>
+        </g>
+      </svg>
+    </div>
+  </main>
+
+  <!-- ========== TIMELINE ========== -->
+  <footer class="timeline">
+    <div class="controls">
+      <button class="btn" id="btn-prev" aria-label="Previous chapter">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <button class="btn" id="btn-play" aria-label="Play / Pause">
+        <svg id="icon-play" viewBox="0 0 24 24" fill="currentColor" style="display:none"><polygon points="6,4 20,12 6,20"/></svg>
+        <svg id="icon-pause" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+      </button>
+      <button class="btn" id="btn-next" aria-label="Next chapter">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+    </div>
+
+    <div class="chapters" id="chapters">
+      <button class="chapter-btn active" data-chapter="0" data-color="orange">
+        <span class="chapter-num">CH 01 · 0:00</span>
+        <span class="chapter-name">① Solar Generation</span>
+        <span class="chapter-bar"></span>
+      </button>
+      <button class="chapter-btn" data-chapter="1" data-color="cyan">
+        <span class="chapter-num">CH 02 · 0:15</span>
+        <span class="chapter-name">② Wind Power</span>
+        <span class="chapter-bar"></span>
+      </button>
+      <button class="chapter-btn" data-chapter="2" data-color="purple">
+        <span class="chapter-num">CH 03 · 0:30</span>
+        <span class="chapter-name">③ Transformers</span>
+        <span class="chapter-bar"></span>
+      </button>
+      <button class="chapter-btn" data-chapter="3" data-color="green">
+        <span class="chapter-num">CH 04 · 0:45</span>
+        <span class="chapter-name">④ Pooling Subst.</span>
+        <span class="chapter-bar"></span>
+      </button>
+      <button class="chapter-btn" data-chapter="4" data-color="yellow">
+        <span class="chapter-num">CH 05 · 1:00</span>
+        <span class="chapter-name">⑤ Grid &amp; Tx Lines</span>
+        <span class="chapter-bar"></span>
+      </button>
+      <button class="chapter-btn" data-chapter="5" data-color="pink">
+        <span class="chapter-num">CH 06 · 1:15</span>
+        <span class="chapter-name">⑥ Land &amp; Clients</span>
+        <span class="chapter-bar"></span>
+      </button>
+    </div>
+
+    <div class="time-display"><b id="time-current">0:00</b> / 1:30</div>
+  </footer>
+</div>
+
+<script>
+// ============================================================
+// KP GROUP - UNIFIED INFRASTRUCTURE STORY (v2)
+// One continuous power-plant scene. Callouts always visible.
+// Focus glow moves between chapters without hiding anything.
+// Data is hardcoded but structured for easy live-data swap later.
+// ============================================================
+
+const DATA = {
+  chapters: [
+    {
+      id: 'solar', color: 'orange', title: 'SOLAR GENERATION',
+      tag: 'Photovoltaic Asset Layer',
+      // Focus glow position(s) in SVG coordinates
+      focus: [{ cx: 280, cy: 600, rx: 340, ry: 170, grad: 'focusOrange' }],
+      tipColor: 'orange',
+      activeTips: [0, 1, 2], // indices in the tip array (by color)
+      stageTitle: 'PHOTOVOLTAIC GENERATION — MODULES, STRINGS, INVERTERS',
+      metrics: [
+        { label: 'Modules', value: '8.5 M+', suffix: 'Units', cls: 'orange', icon: 'panel' },
+        { label: 'Strings', value: '274,000+', suffix: 'Series', cls: 'orange', icon: 'string' },
+        { label: 'Inverters', value: '4,000+', suffix: 'Units', cls: 'orange', icon: 'inverter' },
+      ],
+      desc: '8.5 million PV modules wired into 274,000 strings feed 4,000 inverters that convert DC sunlight to AC, then step up through pad transformers into the collector network.'
+    },
+    {
+      id: 'wind', color: 'cyan', title: 'WIND POWER',
+      tag: 'Onshore Wind Turbine Fleet',
+      focus: [{ cx: 250, cy: 440, rx: 290, ry: 130, grad: 'focusCyan' }],
+      tipColor: 'cyan',
+      activeTips: ['cyan'],
+      stageTitle: 'WIND ENERGY GENERATION — 910+ TURBINES ACROSS RIDGES',
+      metrics: [
+        { label: 'Wind Turbines', value: '910+', suffix: 'WTGs', cls: 'cyan', icon: 'wind' },
+      ],
+      desc: '910+ wind turbine generators harvest kinetic energy across ridge sites, feeding a collector substation that pushes power to the PSS via dedicated HT lattice towers.'
+    },
+    {
+      id: 'transformer', color: 'purple', title: 'STEP-UP TRANSFORMERS',
+      tag: 'Conversion Assets · Spread Across 80 Locations',
+      // Multiple focus spots showing transformers are present at each site
+      focus: [
+        { cx: 630, cy: 660, rx: 90, ry: 60, grad: 'focusPurple' },   // solar edge
+        { cx: 455, cy: 405, rx: 80, ry: 55, grad: 'focusPurple' },   // wind collector
+        { cx: 825, cy: 480, rx: 140, ry: 80, grad: 'focusPurple' },  // PSS transformers
+        { cx: 1430, cy: 440, rx: 100, ry: 65, grad: 'focusPurple' }, // GSS transformers
+      ],
+      stageTitle: 'STEP-UP TRANSFORMERS — DISTRIBUTED ACROSS THE NETWORK',
+      metrics: [
+        { label: 'Transformers', value: '2,200+', suffix: 'Units', cls: 'purple', icon: 'tx' },
+        { label: 'Locations',    value: '80',     suffix: 'Sites', cls: 'purple', icon: 'map' },
+      ],
+      desc: '2,200+ transformers step generation voltage up for transmission — installed at solar farms, wind collector stations, every PSS, and the GSS. Together they span 80 operational locations under unified O&M.'
+    },
+    {
+      id: 'pss', color: 'green', title: 'POOLING SUBSTATIONS',
+      tag: 'KP-Owned Aggregation Yards',
+      focus: [{ cx: 830, cy: 490, rx: 220, ry: 120, grad: 'focusGreen' }],
+      stageTitle: 'PRIVATE POOLING SUBSTATIONS — POWER AGGREGATION',
+      metrics: [
+        { label: 'Pooling Substations', value: '75+', suffix: 'PSS', cls: 'green', icon: 'pss' },
+      ],
+      desc: 'Power generated across sites is aggregated at 75+ KP-owned Pooling Substations. Each PSS houses step-up transformers, bus bars, dead-end gantries, and a control building before handing off to the grid.'
+    },
+    {
+      id: 'grid', color: 'yellow', title: 'GRID TRANSMISSION',
+      tag: 'HT Network · GSS Interconnection',
+      focus: [{ cx: 1170, cy: 480, rx: 360, ry: 140, grad: 'focusYellow' }],
+      stageTitle: 'TRANSMISSION CORRIDOR — 2,200+ KM TO 60+ GRID SUBSTATIONS',
+      metrics: [
+        { label: 'Grid Substations',    value: '60+',    suffix: 'GSS',  cls: 'yellow', icon: 'gss' },
+        { label: 'Evacuation Capacity', value: '4,900+', suffix: 'MW',   cls: 'yellow', icon: 'bolt' },
+        { label: 'Transmission Lines',  value: '2,200+', suffix: 'KM',   cls: 'yellow', icon: 'tx-line' },
+      ],
+      desc: 'Power flows through 2,200+ km of self-built high-tension lines on lattice towers, terminating at 60+ Government Grid Substations with a combined evacuation capacity of 4,900+ MW.'
+    },
+    {
+      id: 'client', color: 'pink', title: 'LAND BANK & CLIENTS',
+      tag: 'Portfolio Footprint & Offtake',
+      focus: [{ cx: 1400, cy: 640, rx: 280, ry: 140, grad: 'focusPink' }],
+      stageTitle: 'PORTFOLIO FOOTPRINT — 12,200+ ACRES, 210+ CLIENTS',
+      metrics: [
+        { label: 'Land Bank', value: '12,200+', suffix: 'Acres',   cls: 'pink', icon: 'land' },
+        { label: 'Clients',   value: '210+',    suffix: 'Offtakers', cls: 'pink', icon: 'client' },
+      ],
+      desc: 'A strategic 12,200+ acre land bank underpins current generation and supports future expansion, while 210+ commercial and industrial clients draw clean power from the grid.'
+    },
+  ],
+  chapterDuration: 15,
+};
+
+const ICONS = {
+  panel:    '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="4" y="6" width="24" height="16" rx="1"/><line x1="10" y1="6" x2="10" y2="22"/><line x1="16" y1="6" x2="16" y2="22"/><line x1="22" y1="6" x2="22" y2="22"/><line x1="4" y1="14" x2="28" y2="14"/></svg>',
+  string:   '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 16 Q 10 6, 16 16 T 28 16"/><circle cx="4" cy="16" r="2"/><circle cx="28" cy="16" r="2"/></svg>',
+  inverter: '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="6" y="8" width="20" height="18" rx="1"/><path d="M10 14 L14 18 L10 22"/><path d="M22 14 L18 18 L22 22"/></svg>',
+  wind:     '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="16" cy="14" r="2"/><path d="M16 14 L16 4"/><path d="M16 14 L24 18"/><path d="M16 14 L8 18"/><line x1="16" y1="16" x2="16" y2="28"/></svg>',
+  tx:       '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="6" y="10" width="20" height="14" rx="1"/><line x1="12" y1="10" x2="12" y2="4"/><line x1="16" y1="10" x2="16" y2="4"/><line x1="20" y1="10" x2="20" y2="4"/><circle cx="12" cy="4" r="1.2"/><circle cx="16" cy="4" r="1.2"/><circle cx="20" cy="4" r="1.2"/></svg>',
+  map:      '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M16 4 C 11 4, 8 8, 8 13 C 8 19, 16 28, 16 28 C 16 28, 24 19, 24 13 C 24 8, 21 4, 16 4 Z"/><circle cx="16" cy="13" r="2.5"/></svg>',
+  pss:      '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="4" y="14" width="24" height="14"/><polygon points="4,14 16,6 28,14"/><line x1="10" y1="14" x2="10" y2="6"/><line x1="22" y1="14" x2="22" y2="6"/></svg>',
+  gss:      '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M6 28 L10 8 L14 28 Z"/><path d="M18 28 L22 8 L26 28 Z"/><line x1="10" y1="14" x2="22" y2="14"/></svg>',
+  bolt:     '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4"><polygon points="18,4 8,18 14,18 12,28 24,12 18,12"/></svg>',
+  'tx-line':'<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 26 L8 8 L12 26 Z"/><path d="M20 26 L24 8 L28 26 Z"/><path d="M8 12 Q 16 18, 24 12"/></svg>',
+  land:     '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4"><polygon points="4,18 16,10 28,18 16,26"/></svg>',
+  client:   '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="16" cy="11" r="4"/><path d="M6 26 C 6 19, 26 19, 26 26"/></svg>',
+};
+
+// ============================================================
+// STATE
+// ============================================================
+const state = { activeChapter: 0, playing: true, elapsed: 0, lastTick: null, panelCollapsed: false };
+
+const els = {
+  detailPanel: document.getElementById('detail-panel'),
+  panelClose: document.getElementById('panel-close'),
+  panelReopen: document.getElementById('panel-reopen'),
+  dChapter: document.getElementById('d-chapter'),
+  dTitle: document.getElementById('d-title'),
+  dTag: document.getElementById('d-tag'),
+  dMetrics: document.getElementById('d-metrics'),
+  dDesc: document.getElementById('d-desc'),
+  stageTitle: document.getElementById('stage-title'),
+  chapters: [...document.querySelectorAll('.chapter-btn')],
+  btnPlay: document.getElementById('btn-play'),
+  btnPrev: document.getElementById('btn-prev'),
+  btnNext: document.getElementById('btn-next'),
+  iconPlay: document.getElementById('icon-play'),
+  iconPause: document.getElementById('icon-pause'),
+  timeCurrent: document.getElementById('time-current'),
+  clockTime: document.getElementById('clock-time'),
+  callouts: [...document.querySelectorAll('.callout')],
+  tips: [...document.querySelectorAll('.tip')],
+  focusGlow: document.getElementById('focus-glow'),
+  focusGlow2: document.getElementById('focus-glow-2'),
+  focusGlow3: document.getElementById('focus-glow-3'),
+  // for chapter 3 we also need a 4th glow; reuse via attribute manipulation
+};
+
+// Inject 4th focus glow dynamically for chapter 3 (4 spots)
+(function injectExtraGlow() {
+  const group = document.getElementById('focus-glow-group');
+  const g4 = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse');
+  g4.setAttribute('id', 'focus-glow-4');
+  g4.setAttribute('class', 'focus-glow');
+  g4.setAttribute('cx', '0'); g4.setAttribute('cy', '0');
+  g4.setAttribute('rx', '80'); g4.setAttribute('ry', '50');
+  g4.setAttribute('fill', 'url(#focusPurple)');
+  g4.setAttribute('opacity', '0');
+  group.appendChild(g4);
+  els.focusGlow4 = g4;
+})();
+
+function applyFocus(chapter) {
+  const spots = chapter.focus;
+  const allGlows = [els.focusGlow, els.focusGlow2, els.focusGlow3, els.focusGlow4];
+  // First reset all glows
+  allGlows.forEach(g => { g.setAttribute('opacity', '0'); });
+
+  // Apply primary
+  if (spots[0]) {
+    els.focusGlow.setAttribute('cx', spots[0].cx);
+    els.focusGlow.setAttribute('cy', spots[0].cy);
+    els.focusGlow.setAttribute('rx', spots[0].rx);
+    els.focusGlow.setAttribute('ry', spots[0].ry);
+    els.focusGlow.setAttribute('fill', `url(#${spots[0].grad})`);
+    els.focusGlow.setAttribute('opacity', '1');
+  }
+  // Secondary glows for multi-spot chapters (chapter 3 transformers)
+  for (let i = 1; i < spots.length && i < 4; i++) {
+    const g = allGlows[i];
+    g.setAttribute('cx', spots[i].cx);
+    g.setAttribute('cy', spots[i].cy);
+    g.setAttribute('rx', spots[i].rx);
+    g.setAttribute('ry', spots[i].ry);
+    g.setAttribute('fill', `url(#${spots[i].grad})`);
+    g.setAttribute('opacity', '1');
+  }
+}
+
+function renderChapter(idx) {
+  const ch = DATA.chapters[idx];
+  if (!ch) return;
+  state.activeChapter = idx;
+  state.elapsed = 0;
+
+  // Stage title
+  els.stageTitle.textContent = ch.stageTitle;
+
+  // Detail panel
+  els.detailPanel.className = 'detail-panel ' + ch.color + (state.panelCollapsed ? ' collapsed' : '');
+  // Reopen tab uses the same active color
+  els.panelReopen.className = 'panel-reopen ' + ch.color + (state.panelCollapsed ? ' visible' : '');
+  els.dChapter.textContent = `${String(idx + 1).padStart(2, '0')} / 06`;
+  els.dTitle.textContent = ch.title;
+  els.dTag.textContent = ch.tag;
+  els.dDesc.textContent = ch.desc;
+
+  els.dMetrics.innerHTML = ch.metrics.map(m => `
+    <div class="metric ${m.cls}">
+      <div class="metric-icon">${ICONS[m.icon] || ''}</div>
+      <div class="metric-info">
+        <span class="metric-label">${m.label}</span>
+        <span class="metric-value">${m.value}</span>
+      </div>
+      <span class="metric-suffix">${m.suffix}</span>
+    </div>
+  `).join('');
+
+  // Move focus glow(s) — never dims anything
+  applyFocus(ch);
+
+  // Active callout grows; others remain visible at normal size
+  els.callouts.forEach((c, i) => c.classList.toggle('active', i === idx));
+
+  // Active-color tips emphasised
+  els.tips.forEach(t => t.classList.toggle('active', t.classList.contains(ch.color)));
+
+  // Update chapter buttons
+  els.chapters.forEach((btn, i) => {
+    btn.classList.toggle('active', i === idx);
+    btn.classList.toggle('done', i < idx);
+  });
+}
+
+function colorFor(color) {
+  return {
+    orange: 'var(--orange)', cyan: 'var(--cyan)', purple: 'var(--purple)',
+    green: 'var(--green)', yellow: 'var(--yellow)', pink: 'var(--pink)'
+  }[color] || 'var(--cyan)';
+}
+
+function ensureBarFills() {
+  els.chapters.forEach(btn => {
+    const bar = btn.querySelector('.chapter-bar');
+    if (!bar.querySelector('.bar-fill')) {
+      const fill = document.createElement('span');
+      fill.className = 'bar-fill';
+      Object.assign(fill.style, {
+        position: 'absolute', left: '0', top: '0', bottom: '0', width: '0%',
+        background: 'var(--cyan)', boxShadow: '0 0 10px var(--cyan)',
+        transition: 'width 0.1s linear'
+      });
+      bar.style.position = 'relative';
+      bar.appendChild(fill);
+    }
+  });
+}
+
+function updateProgressBars() {
+  els.chapters.forEach((btn, i) => {
+    const fill = btn.querySelector('.bar-fill');
+    if (!fill) return;
+    const c = colorFor(btn.dataset.color);
+    fill.style.background = c;
+    fill.style.boxShadow = `0 0 10px ${c}`;
+    if (i < state.activeChapter) fill.style.width = '100%';
+    else if (i === state.activeChapter) {
+      const pct = Math.min(100, (state.elapsed / (DATA.chapterDuration * 1000)) * 100);
+      fill.style.width = `${pct}%`;
+    } else fill.style.width = '0%';
+  });
+}
+
+function tick(ts) {
+  if (!state.lastTick) state.lastTick = ts;
+  const dt = ts - state.lastTick;
+  state.lastTick = ts;
+  if (state.playing) {
+    state.elapsed += dt;
+    if (state.elapsed >= DATA.chapterDuration * 1000) {
+      const next = (state.activeChapter + 1) % DATA.chapters.length;
+      renderChapter(next);
+    }
+    updateProgressBars();
+    const totalMs = state.activeChapter * DATA.chapterDuration * 1000 + state.elapsed;
+    const totalSec = Math.floor(totalMs / 1000);
+    els.timeCurrent.textContent = `${Math.floor(totalSec/60)}:${String(totalSec%60).padStart(2,'0')}`;
+  }
+  requestAnimationFrame(tick);
+}
+
+function setPlaying(playing) {
+  state.playing = playing;
+  els.iconPlay.style.display = playing ? 'none' : 'block';
+  els.iconPause.style.display = playing ? 'block' : 'none';
+}
+
+// Events
+els.chapters.forEach((btn, i) => btn.addEventListener('click', () => renderChapter(i)));
+els.btnPlay.addEventListener('click', () => setPlaying(!state.playing));
+els.btnPrev.addEventListener('click', () => {
+  const prev = (state.activeChapter - 1 + DATA.chapters.length) % DATA.chapters.length;
+  renderChapter(prev);
+});
+els.btnNext.addEventListener('click', () => {
+  const next = (state.activeChapter + 1) % DATA.chapters.length;
+  renderChapter(next);
+});
+// Click on numbered callouts to jump
+els.callouts.forEach((c, i) => {
+  c.addEventListener('click', () => {
+    renderChapter(i);
+    setPlaying(false);
+  });
+});
+
+// Detail panel close / reopen
+function setPanelCollapsed(collapsed) {
+  state.panelCollapsed = collapsed;
+  const ch = DATA.chapters[state.activeChapter];
+  els.detailPanel.classList.toggle('collapsed', collapsed);
+  els.panelReopen.classList.toggle('visible', collapsed);
+  // Sync colour classes
+  els.panelReopen.className = 'panel-reopen ' + ch.color + (collapsed ? ' visible' : '');
+}
+els.panelClose.addEventListener('click', () => setPanelCollapsed(true));
+els.panelReopen.addEventListener('click', () => setPanelCollapsed(false));
+
+// Keyboard
+document.addEventListener('keydown', e => {
+  if (e.code === 'Space') { e.preventDefault(); setPlaying(!state.playing); }
+  else if (e.code === 'ArrowRight') els.btnNext.click();
+  else if (e.code === 'ArrowLeft') els.btnPrev.click();
+  else if (e.code === 'KeyD') setPanelCollapsed(!state.panelCollapsed);
+});
+
+// Live clock
+function startClock() {
+  const update = () => {
+    const d = new Date();
+    els.clockTime.textContent = `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}:${String(d.getSeconds()).padStart(2,'0')}`;
+  };
+  update(); setInterval(update, 1000);
+}
+
+// Init
+ensureBarFills();
+renderChapter(0);
+setPlaying(true);
+startClock();
+requestAnimationFrame(tick);
+</script>
+</body>
+</html>
